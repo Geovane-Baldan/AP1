@@ -1,0 +1,213 @@
+from time import sleep
+end = -1
+totalVendas = 0
+listaCarros = []
+att = 0
+carrosCaros = 0
+
+
+class Carro:
+    def __init__(self):
+        self.modelo = ""
+        self.ano = 0
+        self.preco = 0.0
+        self.placa = ""
+        self.status = ""
+
+
+def validarCarroCadastrado(lista, placaCarro):
+    jaExiste = False
+    for elemento in lista:
+        if elemento.placa == placaCarro:
+            jaExiste = True
+    return jaExiste
+
+
+def verificarAno(ano):
+    anoValido = False
+    if 1990 < ano <= 2018:
+        anoValido = True
+    return anoValido
+
+
+def cadastrarCarro(list):
+    novoCarro = Carro()
+    novoCarro.modelo = input("Digite o modelo do carro: ").capitalize()
+    placaCar = input("Digite a placa do carro: ").upper()
+    placaRepetida = validarCarroCadastrado(list, placaCar)
+    if placaRepetida is False:
+        novoCarro.placa = placaCar
+
+    novoCarro.preco = float(input("Digite o preço do carro:R$ "))
+    anoFabricacao = int(input("Digite o ano do carro: "))
+    anoValido = verificarAno(anoFabricacao)
+    if anoValido is True:
+        novoCarro.ano = anoFabricacao
+    novoCarro.status = input("Digite o Status do carro: ").capitalize()
+
+    if anoValido is True and placaRepetida is False:
+        list.append(novoCarro)
+        print("Carro cadastrado com sucesso!")
+    else:
+        print("ERRO ! Não foi possível cadastrar o carro!")
+
+
+def exibirCarros(list):
+    nro = 1
+    for elemento in list:
+        sleep(0.3)
+        print("\n\033[31mDados do carro {}:\033[0m".format(nro))
+        sleep(0.3)
+        print("Modelo: {}".format(elemento.modelo))
+        sleep(0.3)
+        print("Ano: {}".format(elemento.ano))
+        sleep(0.3)
+        print("Placa: {}".format(elemento.placa))
+        sleep(0.3)
+        print("Preco: R${:.2f}".format(elemento.preco))
+        sleep(0.3)
+        print("Status: {}".format(elemento.status))
+        nro += 1
+
+
+def exibirMenu():
+    print("\nMenu:")
+    print("0 - Sair")
+    print("1 - Cadastrar")
+    print("2 - Listar")
+    print("3 - Atualizar")
+    print("4 - Vender")
+    print("5 - Exibir a receita")
+    print("6 - Valor total por status")
+    print("7 - Reservar")
+    print("8 - Total de atualizações")
+    print("9 - Acima de R$50000")
+    print("10 - Consulta para compra")
+
+
+def atualizarCarro(lista):
+    placaCarro = input("Digite a placa do carro a ser atualizado: ").upper()
+    foiAtualizado = False
+    for elemento in lista:
+        if elemento.placa == placaCarro:
+            elemento.preco = float(input("Digite o novo preço:R$ "))
+            elemento.modelo = input("Digite o novo modelo: ").capitalize()
+            elemento.status = input("Digite o novo status: ").capitalize()
+            foiAtualizado = True
+            print("Carro atualizado com sucesso!")
+            global att
+            att += 1
+    if foiAtualizado is False:
+        print("Nenhum carro localizado com a placa!")
+
+
+def venderCarro(lista):
+    modeloCarro = input("Digite o modelo do carro: ").capitalize()
+    anoCarro = int(input("Digite o ano do carro: "))
+    foiVendido = False
+    receita = 0
+    for elemento in lista:
+        if modeloCarro == elemento.modelo and anoCarro == elemento.ano:
+            if elemento.status == "Livre":
+                elemento.status = "Vendido"
+                receita = elemento.preco
+                foiVendido = True
+    if foiVendido is False:
+        print("Nenhum carro foi encontrado!")
+    return receita
+
+
+def valorStatus(lista):
+    totalStatus = 0
+    statusEscolha = input("Qual o status que deseja ver? ").capitalize()
+    for elemento in lista:
+        if elemento == statusEscolha:
+            totalStatus += elemento.preco
+    print("\nO preço total dos veículos desse Status é de R${:.2f}.".format(totalStatus))
+
+
+def reservarCarro(lista):
+    placaReserva = input("Digite a placa do veículo desejado: ")
+    for elemento in lista:
+        if elemento.placa == placaReserva:
+            if elemento.status == "Livre":
+                elemento.status = "Reservado"
+                print("\nCarro reservado com sucesso!")
+            else:
+                if elemento.status == "Vendido":
+                    print("O carro já foi vendido.")
+                else:
+                    print("O carro já foi reservado anteriormente.")
+        else:
+            print("Carro não encontrado!")
+
+
+def livreCaro(lista):
+    for elemento in lista:
+        if elemento.preco > 50000 and elemento.status == "Livre":
+            global carrosCaros
+            carrosCaros += 1
+
+
+def consulta(lista):
+    cont = 1
+    valorMax = float(input("Qual o valor máximo que deseja pagar?R$ "))
+    maxUso = int(input("Qual o máximo tempo de uso? "))
+    anoMax = 2018 - maxUso
+    for elemento in lista:
+        if elemento.preco <= valorMax and anoMax <= elemento.ano and elemento.status == "Livre":
+            sleep(0.5)
+            print("\nDetalhes do carro {}:".format(cont))
+            sleep(0.3)
+            print("Placa: {}".format(elemento.placa))
+            sleep(0.3)
+            print("Modelo: {}".format(elemento.modelo))
+            sleep(0.3)
+            print("Ano: {}".format(elemento.ano))
+            sleep(0.3)
+            print("Valor: R${:.2f}".format(elemento.preco))
+            cont += 1
+        else:
+            print("Nenhum carro encontrado nas condições propostas!")
+
+
+while end != 0:
+    exibirMenu()
+    op = int(input("Selecione a opção: "))
+    if op == 1:
+        cadastrarCarro(listaCarros)
+
+    elif op == 2:
+        exibirCarros(listaCarros)
+
+    elif op == 3:
+        atualizarCarro(listaCarros)
+
+    elif op == 4:
+        totalVendas += venderCarro(listaCarros)
+
+    elif op == 5:
+        print("O valor obtido com as vendas foi de R${}".format(totalVendas))
+
+    elif op == 6:
+        valorStatus(listaCarros)
+
+    elif op == 7:
+        reservarCarro(listaCarros)
+
+    elif op == 8:
+        print("{} carros foram atualizados nessa sessão.".format(att))
+
+    elif op == 9:
+        print("Existem {} carros Livres com preço superior à R$50000.00 cadastrados.".format(carrosCaros))
+
+    elif op == 10:
+        consulta(listaCarros)
+
+    elif op == 0:
+        sleep(0.2)
+        print("Até logo!")
+        sleep(0.3)
+        end = 0
+    else:
+        print("Selecione uma opção válida!")
