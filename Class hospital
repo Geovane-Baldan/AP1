@@ -1,0 +1,247 @@
+from time import sleep
+end = -1
+listaPacientes = []
+excl = 0
+cont_fem = 0
+soma_fem = 0
+cont_masc = 0
+soma_masc = 0
+
+
+class Paciente:
+    def __init__(self):
+        self.nome = ""
+        self.idade = 0
+        self.sexo = ""
+        self.atendimento = ""
+
+
+def exibirMenu():
+    print("="*40)
+    print("\nMenu:")
+    print("1 - Cadastrar")
+    print("2 - Listar")
+    print("3 - Apagar cadastro")
+    print("4 - Exibir por atendimento")
+    print("5 - Quantidade de cadastros apagados")
+    print("6 - Média de idade por sexo")
+    print("7 - Alterar o plano de saúde")
+    print("8 - Sair\n")
+    print("="*40)
+
+
+def validarSexo(sexo):
+    sexoValido = True
+    if sexo not in "Masculino" and sexo not in "Feminino":
+        sexoValido = False
+    return sexoValido
+
+
+def validarNome(lista, nome):
+    ja_existe = False
+    for elemento in lista:
+        if elemento.nome == nome:
+            ja_existe = True
+    return ja_existe
+
+
+def validarIdade(idade):
+    idadeValida = False
+    if 0 <= idade < 100:
+        idadeValida = True
+    return idadeValida
+
+
+def cadastrarPaciente(lista):
+    novoPaciente = Paciente()
+    nomePaciente = input("Digite o nome do paciente: ").capitalize()
+    nomeRepetido = validarNome(lista, nomePaciente)
+    if nomeRepetido is False:
+        novoPaciente.nome = nomePaciente
+
+        idadePaciente = int(input("Digite a idade do paciente: "))
+        idadeValida = validarIdade(idadePaciente)
+        if idadeValida is True:
+            novoPaciente.idade = idadePaciente
+
+            sexoPaciente = input("Digite o sexo do paciente: ").capitalize()
+            sexoValido = validarSexo(sexoPaciente)
+            if sexoValido is True:
+                novoPaciente.sexo = sexoPaciente
+                if sexoPaciente == "Feminino":
+                    global cont_fem, soma_fem
+                    cont_fem += 1
+                    soma_fem += idadePaciente
+
+                elif sexoPaciente == "Masculino":
+                    global cont_masc, soma_masc
+                    cont_masc += 1
+                    soma_masc += idadePaciente
+
+                print("1 - Plano de saúde")
+                print("2 - SUS")
+                print("3 - Particular")
+                atend = int(input("Qual o tipo de atendimento? "))
+
+                if atend == 1:
+                    novoPaciente.atendimento = "Plano de saúde"
+                elif atend == 2:
+                    novoPaciente.atendimento = "SUS"
+                elif atend == 3:
+                    novoPaciente.atendimento = "Particular"
+                else:
+                    print("Selecione uma opção válida!")
+
+            else:
+                print("Sexo inválido!")
+        else:
+            print("Idade inválida!")
+    else:
+        print("ERRO! Nome já cadastrado!")
+    if nomeRepetido is False and idadeValida is True and sexoValido is True:
+        listaPacientes.append(novoPaciente)
+        print("Paciente cadastrado com sucesso!")
+
+
+def listarPacientes(lista):
+    num = 1
+    if len(listaPacientes) != 0:
+        for elemento in lista:
+            sleep(0.3)
+            print("\n\033[31mDados do paciente {}:\033[0m".format(num))
+            sleep(0.3)
+            print("Nome: {}".format(elemento.nome))
+            sleep(0.3)
+            print("Idade: {}".format(elemento.idade))
+            sleep(0.3)
+            print("Sexo: {}".format(elemento.sexo))
+            sleep(0.3)
+            print("Plano de saúde: {}".format(elemento.atendimento))
+            num += 1
+    else:
+        print("\nNenhum paciente cadastrado!")
+
+
+def deletarPacientes(lista):
+    nome_excluir = str(input("Digite o nome do paciente: ")).capitalize()
+    nao_existe = True
+    for elemento in lista:
+        if elemento.nome == nome_excluir:
+            del elemento.nome
+            del elemento.sexo
+            del elemento.idade
+            del elemento.atendimento
+            nao_existe = False
+            global excl
+            excl += 1
+            print("Cadastro apagado com sucesso!")
+
+    if nao_existe is True:
+        print("Nome não cadastrado!")
+
+
+def buscarAtend(lista):
+    print("\n1 - Plano de saúde")
+    print("2 - SUS")
+    print("3 - Particular")
+    tipo_atend = int(input("Qual o tipo de atendimento desejado? "))
+
+    if tipo_atend == 1:
+        print("\nOs pacientes com Plano de saúde são:")
+        for elemento in lista:
+            if elemento.atendimento == "Plano de saúde":
+                print("- {}".format(elemento.nome))
+                sleep(0.3)
+
+    elif tipo_atend == 2:
+        print("\nOs pacientes com plano do SUS são:")
+        for elemento in lista:
+            if elemento.atendimento == "SUS":
+                print("- {}".format(elemento.nome))
+                sleep(0.3)
+
+    elif tipo_atend == 3:
+        print("\nOs pacientes com plano Particular são:")
+        for elemento in lista:
+            if elemento.atendimento == "Particular":
+                print("- {}".format(elemento.nome))
+                sleep(0.3)
+
+    else:
+        print("\nTipo de atendimento inválido, por favor selecione uma opção pré-definida no sistema!")
+
+
+def mediaSexo():
+    if cont_fem > 0:
+        sleep(0.5)
+        print("\nA média de idades dos pacientes do sexo feminino é de {:.0f} anos.".format(soma_fem/cont_fem))
+    else:
+        sleep(0.5)
+        print("\nA média de idades dos pacientes do sexo feminino é de {:.0f} anos.".format(soma_fem / 1))
+
+    if cont_masc > 0:
+        sleep(0.3)
+        print("\nA média de idades dos pacientes do sexo masculino é de {:.0f} anos.".format(soma_masc / cont_masc))
+    else:
+        sleep(0.3)
+        print("\nA média de idades dos pacientes do sexo masculino é de {:.0f} anos.".format(soma_masc/ 1))
+
+
+def mudarPlano(lista):
+    mudar_plan = (input("\nDigite o nome do paciente: ")).capitalize()
+    nao_existe = True
+    for elemento in lista:
+        if elemento.nome == mudar_plan:
+            print("O plano atual do(a) paciente {} é {}.".format(elemento.nome, elemento.atendimento))
+
+            escolha = str(input("\nDeseja alterar o plano? ")).lower()
+            if escolha == "sim":
+                print("1 - Plano de saúde")
+                print("2 - SUS")
+                print("3 - Particular")
+                mudanca = int(input("\nQual o novo plano do paciente? "))
+
+                if mudanca == 1:
+                    elemento.atendimento = "Plano de saúde"
+
+                elif mudanca == 2:
+                    elemento.atendimento = "SUS"
+
+                elif mudanca == 3:
+                    elemento.atendimento = "Particular"
+            nao_existe = False
+    if nao_existe is True:
+        print("\nEsse nome não está cadastrado na base de dados!")
+
+
+while end != 0:
+    exibirMenu()
+    op = int(input("\nDigite a opção desejada: "))
+
+    if op == 1:
+        cadastrarPaciente(listaPacientes)
+
+    elif op == 2:
+        listarPacientes(listaPacientes)
+
+    elif op == 3:
+        deletarPacientes(listaPacientes)
+
+    elif op == 4:
+        buscarAtend(listaPacientes)
+
+    elif op == 5:
+        print("\n{} pacientes foram excluídos do sistema.".format(excl))
+
+    elif op == 6:
+        mediaSexo()
+
+    elif op == 7:
+        mudarPlano(listaPacientes)
+
+    elif op == 8:
+        print("Até logo!")
+        sleep(0.3)
+        end = 0
+
+
