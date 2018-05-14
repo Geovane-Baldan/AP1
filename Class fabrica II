@@ -1,0 +1,131 @@
+from time import sleep
+escolha = 10
+listadefuncionarios = []
+listadedepartamentos = []
+class Funcionarios:
+  def __init__(self):
+    self.nome = ""
+    self.valordahora = 0
+    self.departamento = ""
+  
+def Menu():
+  print("_"*30)
+  print("1 - Cadastrar um departamento")
+  print("2 - listar os departamentos")
+  print("3 - Cadastrar um funcionario")
+  print("4 - listar os funcionarios")
+  print("5 - Calcular o salario de um funcionario")
+  print("6 - Exibir o nome do funcionario que recebera o maior salario do mes")
+  print("7 - Informar departamento que possui a maior folha de pagamento")
+  print("8 - Excluir funcinarios do sistema que possuam uma jornada de trabalho menor que um valor determinado")
+def VerificarNome(nome,lista):
+  nomeexiste = False
+  for n in lista:
+    if n.nome == nome:
+      nomeexiste = True
+  return nomeexiste
+def VerificarDepartamento(nome,lista):
+  nomeexiste = False
+  for n in lista:
+    if n == nome:
+      nomeexiste = True
+  return nomeexiste
+  
+
+def CadastrarFuncionarios(lista):
+  objfuncionario = Funcionarios()
+  nome = input("Digite o nome do funcionario:")
+  if VerificarNome(nome,listadefuncionarios) == False:
+    objfuncionario.valordahora = float(input("Digite o custo por hora do funcionario:"))
+    departamento = input("Digite o nome do departamento, o qual  o funcionario pertence")
+    if VerificarDepartamento(departamento,listadedepartamentos) == True:
+      objfuncionario.nome = nome
+      objfuncionario.departamento = departamento
+      lista.append(objfuncionario)
+      print("Registro realizado com sucesso")
+    else:
+      print("Esse departamento não existe")
+  else:
+    print("Esse nome já existe")
+      
+
+def CadastrarDepartamento(lista):
+  nome = (input("Digite o nome do departamento"))
+  if VerificarDepartamento(nome,listadedepartamentos) == False:
+    lista.append(nome)
+
+def ListarDepartamentos(lista):
+  for n in lista:
+    print(n)
+
+def ListarFuncionarios(lista):
+  lista.sort()
+  for n in lista:
+    print("_"*30)
+    print("NOME:"+n.nome)
+    print("DEPARTAMENTO:"+n.departamento)
+    print("VALOR POR HORA:{}".format(n.valordahora))
+    sleep(1)
+def CalcularSalario(lista):
+  nome = input("Digite o nome do funcionario:")
+  tempo = float(input("Digite o tempo que o funcionario trabalhou no mês em horas:"))
+  salario = 0
+  if VerificarNome(nome,listadefuncionarios) == True:
+    for n in lista:
+      if n.nome == nome:
+        if tempo > 200:
+          salario = n.valordahora * 2 * tempo
+        else:
+          salario = n.valordahora * tempo
+  else:
+    print("Esse nome não existe")
+  return salario
+def VerFuncionarioMaisRico(lista):
+  maior = 0 
+  funcionario = ""
+  for n in lista:
+    if n.valordahora > maior:
+      maior = n.valordahora
+      funcionario = n.nome
+  return funcionario
+
+def VerDepartamentoMaisRico(lista):
+  dinheiro = 0
+  departamento = ""
+  copiadalista = []
+  maior = 0
+  for n in lista:
+    copiadalista.append(n)
+  for n in lista:
+    for x in copiadalista:
+      if n.departamento == x.departamento:
+        dinheiro += x.valordahora
+  if dinheiro > maior:
+    maior = dinheiro
+    departamento = n.departamento
+  print("O departamento {} possui a maior folha de pagamento com {} por hora".format(departamento,maior))
+def ExcluirFuncionario(lista):
+  dias = int(input("Digite a quantidade de horas minimas que um funcionario precisa trabalhar por mês"))
+
+while escolha != 0:
+  Menu()
+  escolha = int(input("Escolha uma opcao:"))
+  if escolha ==1:
+    CadastrarDepartamento(listadedepartamentos)
+  elif escolha == 2:
+    ListarDepartamentos(listadedepartamentos)
+  elif escolha == 3:
+    CadastrarFuncionarios(listadefuncionarios)
+  elif escolha ==4:
+    ListarFuncionarios(listadefuncionarios)
+  elif escolha ==5:
+    print("O salario desse funcionario é R${}" .format(CalcularSalario(listadefuncionarios)))
+  elif escolha ==6:
+    print("O funcionario que recebe mais é"+VerFuncionarioMaisRico(listadefuncionarios))
+  elif escolha ==7:
+    VerDepartamentoMaisRico(listadefuncionarios)
+
+    
+    
+    
+    
