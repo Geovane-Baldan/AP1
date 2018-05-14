@@ -7,6 +7,7 @@ class Funcionarios:
     self.nome = ""
     self.valordahora = 0
     self.departamento = ""
+    self.horasmensais = 0
   
 def Menu():
   print("_"*30)
@@ -42,6 +43,7 @@ def CadastrarFuncionarios(lista):
       objfuncionario.nome = nome
       objfuncionario.departamento = departamento
       lista.append(objfuncionario)
+      objfuncionario.horasmensais = float(input("Digite a quantidade de horas mensais do funcionario"))
       print("Registro realizado com sucesso")
     else:
       print("Esse departamento não existe")
@@ -106,6 +108,10 @@ def VerDepartamentoMaisRico(lista):
   print("O departamento {} possui a maior folha de pagamento com {} por hora".format(departamento,maior))
 def ExcluirFuncionario(lista):
   dias = int(input("Digite a quantidade de horas minimas que um funcionario precisa trabalhar por mês"))
+  for n in lista:
+    if n.horasmensais < dias:
+      lista.remove(n)
+      print("Funcionarios removidos com exito")
 
 while escolha != 0:
   Menu()
@@ -124,8 +130,7 @@ while escolha != 0:
     print("O funcionario que recebe mais é"+VerFuncionarioMaisRico(listadefuncionarios))
   elif escolha ==7:
     VerDepartamentoMaisRico(listadefuncionarios)
-
-    
-    
+  elif escolha ==8:
+    ExcluirFuncionario(listadefuncionarios)
     
     
