@@ -36,9 +36,9 @@ def CadastrarFuncionarios(lista):
   objfuncionario = Funcionarios()
   nome = input("Digite o nome do funcionario:")
   if VerificarNome(nome,listadefuncionarios) == False:
-    objfuncionario.valordahora = float(input("Digite o custo por hora do funcionario:"))
     departamento = input("Digite o nome do departamento, o qual  o funcionario pertence")
     if VerificarDepartamento(departamento,listadedepartamentos) == True:
+      objfuncionario.valordahora = float(input("Digite o custo por hora do funcionario:"))
       objfuncionario.nome = nome
       objfuncionario.departamento = departamento
       lista.append(objfuncionario)
