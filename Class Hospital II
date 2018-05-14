@@ -1,0 +1,217 @@
+from time import sleep
+end = -1
+listaPacientes = []
+cont_geral = 0
+cont_dengue = 0
+
+
+class Paciente:
+    def __init__(self):
+        self.nome = ""
+        self.peso = 0.0
+        self.medico = ""
+        self.doenca = ""
+        self.dias = 0
+
+
+def exibirMenu():
+    print("="*40)
+    print("Menu:")
+    print("1 - Cadastrar")
+    print("2 - Listar cadastros")
+    print("3 - Alterar dados")
+    print("4 - Exibir o mais magro")
+    print("5 - Alterar médico responsável")
+    print("6 - Percentual de pacientes com dengue")
+    print("7 - Médico que recebe o maior valor")
+    print("8 - Lista com todos os médicos atendendo")
+    print("9 - Médico com mais pacientes internados")
+    print("10 - Sair")
+    print("="*40)
+
+
+def validarNome(lista, nome):
+    ja_existe = False
+    for elemento in lista:
+        if elemento.nome == nome:
+            ja_existe = True
+    return ja_existe
+
+
+def cadastroPacientes(lista):
+    novoPaciente = Paciente()
+
+    nomePaciente = input("Digite o nome do paciente: ").capitalize()
+    nomeRepetido = validarNome(listaPacientes, nomePaciente)
+    if nomeRepetido is False:
+        novoPaciente.nome = nomePaciente
+
+        pesoPaciente = float(input("Digite o peso do paciente: "))
+        novoPaciente.peso = pesoPaciente
+
+        medicoResp = input("Digite o nome do médico responsável: ").capitalize()
+        novoPaciente.medico = medicoResp
+
+        doencaPaciente = input("Digite a doença do paciente: ").capitalize()
+        novoPaciente.doenca = doencaPaciente
+        global cont_geral, cont_dengue
+        cont_geral += 1
+        if doencaPaciente == "Dengue":
+            cont_dengue += 1
+
+        diasInternado = int(input("Digite quantos dias de internação: "))
+        novoPaciente.dias = diasInternado
+
+        lista.append(novoPaciente)
+        print("\nPaciente cadastrado com sucesso!\n")
+    else:
+        print("\nERRO! Nome já cadastrado!\n")
+
+
+def exibirPacientes(lista):
+    num = 1
+    if len(listaPacientes) != 0:
+        for elemento in lista:
+            sleep(0.3)
+            print("\n\033[31mDados do paciente {}:\033[0m".format(num))
+            sleep(0.3)
+            print("Nome: {}".format(elemento.nome))
+            sleep(0.3)
+            print("Peso: {}Kg".format(elemento.peso))
+            sleep(0.3)
+            print("Médico responsável: {}".format(elemento.medico))
+            sleep(0.3)
+            print("Doença: {}".format(elemento.doenca))
+            sleep(0.3)
+            print("Dias internado: {}".format(elemento.dias))
+            num += 1
+    else:
+        print("\nNenhum paciente cadastrado!")
+
+
+def alterarDados(lista):
+    nomePaciente = input("Digite o nome do paciente: ").capitalize()
+    foiAtualizado = False
+    for elemento in lista:
+        if elemento.nome == nomePaciente:
+            elemento.peso = float(input("Digite o novo peso: "))
+            elemento.doenca = input("Digite a nova doença: ").capitalize()
+            elemento.dias = int(input("Digite a nova quantidade de dias: "))
+            foiAtualizado = True
+            print("Paciente atualizado com sucesso!")
+
+    if foiAtualizado is False:
+        print("Paciente não encontrado!")
+
+
+def maisMagro(lista):
+    magro = 999999999999
+    nomeMagro = ""
+    for elemento in lista:
+        if elemento.peso < magro:
+            magro = elemento.peso
+            nomeMagro = elemento.nome
+
+    print("\nO(A) paciente mais magro(a) é o(a) {} que pesa {}Kg.\n".format(nomeMagro, magro))
+
+
+def alterarMedico(lista):
+    sucesso = False
+    nomePaciente = input("Digite o nome do paciente: ").capitalize()
+    for elemento in lista:
+        if elemento.nome == nomePaciente:
+            print("O(A) médico(a) responsável é o(a) {}.".format(elemento.medico))
+            novoMedico = input("Digite o novo médico responsável: ").capitalize()
+            elemento.medico = novoMedico
+            sucesso = True
+    if sucesso is True:
+        print("\nMédico atualizado com sucesso!\n")
+    else:
+        print("\nERRO! Paciente não encontrado!\n")
+
+
+def percentualDengue():
+    if cont_geral > 0:
+        print("\nOs pacientes com dengue representam {}% do total\n".format((cont_dengue / cont_geral) * 100))
+    else:
+        print("\nOs pacientes com dengue representam {}% do total\n".format((cont_dengue / 1) * 100))
+
+
+def medicosAtendendo(lista):
+    indice = 0
+    listaMedicos = []
+    for elemento in lista:
+        if elemento.medico not in listaMedicos:
+            listaMedicos.append(elemento.medico)
+
+    if len(listaMedicos) > 0:
+        print("\nLista de médicos atendendo:")
+        while indice < len(listaMedicos):
+            print("- {}".format(listaMedicos[indice]))
+            sleep(0.3)
+            indice += 1
+    else:
+        print("\nNenhum paciente está sendo tratado no momento!\n")
+
+
+def maisPacientes(lista):
+    medicos_com_pacientes = []
+    repeticao = []
+    indice = 0
+    for elemento in lista:
+        medicos_com_pacientes.append(elemento.medico)
+
+    medicos_com_pacientes.sort()
+    print(medicos_com_pacientes)
+    i = medicos_com_pacientes[0]
+
+    repeticao.append(i)
+    len(medicos_com_pacientes)
+
+
+def maiorValor(lista):
+    medicos = []
+    valores = []
+    for elemento in lista:
+        medicos.append(elemento.medico)
+        valores.append(elemento.dias * 100)
+
+    print(medicos)
+    print(valores)
+
+
+while end != 0:
+    exibirMenu()
+    op = int(input("Qual a opção desejada? "))
+
+    if op == 1:
+        cadastroPacientes(listaPacientes)
+
+    elif op == 2:
+        exibirPacientes(listaPacientes)
+
+    elif op == 3:
+        alterarDados(listaPacientes)
+
+    elif op == 4:
+        maisMagro(listaPacientes)
+
+    elif op == 5:
+        alterarMedico(listaPacientes)
+
+    elif op == 6:
+        percentualDengue()
+
+    elif op == 7:
+        maiorValor(listaPacientes)
+
+    elif op == 8:
+        medicosAtendendo(listaPacientes)
+
+    elif op == 9:
+        maisPacientes(listaPacientes)
+
+    elif op == 10:
+        sleep(0.3)
+        print("Até logo!")
+        end = 0
