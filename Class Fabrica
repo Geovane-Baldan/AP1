@@ -1,0 +1,136 @@
+from time import sleep
+end = -1
+listaDepartamentos = []
+listaFuncionarios = []
+
+
+class Funcionario:
+    def __init__(self):
+        self.nome = ""
+        self.valor_por_hora = 0.0
+        self.departamento = ""
+        self.salario = 0.0
+
+
+def exibirMenu():
+    print("="*45)
+    print("Menu:")
+    print("1 - Cadastrar departamento")
+    print("2 - Listar departamentos")
+    print("3 - Cadastrar funcionário")
+    print("4 - Listar funcionários")
+    print("5 - Funcionário com maior salário no mês")
+    print("="*45)
+
+
+def validarDepartamento(lista, nome):
+    nao_existe = True
+    for elemento in lista:
+        if elemento == nome:
+            nao_existe = False
+    return nao_existe
+
+
+def cadastrarDepartamento(lista):
+    novoDepartamento = str(input("Digite o nome do departamento: ")).upper()
+    if novoDepartamento not in lista:
+        lista.append(novoDepartamento)
+        print("\n\033[32mDepartamento cadastrado com sucesso!\033[0m\n")
+    else:
+        print("\n\033[31mDepartamento ja cadastrado!\033[0m\n")
+
+
+def listarDepartamentos(lista):
+    if len(lista) != 0:
+        lista.sort()
+        print("Lista de departamentos:")
+        for n in lista:
+            print("- {}".format(n))
+    else:
+        print("\n\033[31mNenhum departamento cadastrado!\033[0m\n")
+
+
+def validarHora(valor1):
+    valido = False
+    if valor1 > 5.00:
+        valido = True
+    else:
+        valido = False
+
+    return valido
+
+
+def cadastrarFuncionario(lista):
+    novoFunc = Funcionario()
+
+    nomeFunc = (input("Digite o nome do funcionário: ")).capitalize()
+    novoFunc.nome = nomeFunc
+
+    valorHora = float(input("Digite o valor recebido por hora do funcionário:R$ "))
+    if validarHora(valorHora) is True:
+        novoFunc.valor_por_hora = valorHora
+
+        departFunc = (input("Digite o departamento do funcionário: ")).upper()
+        if validarDepartamento(listaDepartamentos, departFunc) is False:
+            novoFunc.departamento = departFunc
+
+            lista.append(novoFunc)
+            print("\n\033[32mFuncionário cadastrado com sucesso!\033[0m\n")
+        else:
+            print("\n\033[31mO departamento não existe!\033[0m\n")
+    else:
+        print("\n\033[31mValor por hora inválido! Valor inferior a R$5.00\033[0m\n")
+
+
+def listarFunc(lista):
+    num = 1
+    if len(lista) != 0:
+        for elemento in lista:
+            sleep(0.3)
+            print("\nDados do funcionário {}".format(num))
+            sleep(0.3)
+            print("Nome: {}".format(elemento.nome))
+            sleep(0.3)
+            print("Departamento: {}".format(elemento.departamento))
+            sleep(0.3)
+            print("Valor por hora: R${:.2f}".format(elemento.valor_por_hora))
+            num += 1
+    else:
+        print("\n033[31mNenhum funcionário cadastrado!\033[0m\n")
+
+
+def calcularSalario(lista):
+    nome = input("Digite o nome do funcionário: ").capitalize()
+    for elemento in lista:
+        if elemento.nome == nome:
+            horasTrab = int(input("Digite as horas trabalhadas: "))
+            if horasTrab > 200:
+                salario = horasTrab * elemento.valor_por_hora * 2
+                print("O funcionário {} receberá R${:.2f} de salário.".format(nome, salario))
+                
+            else:
+                salario = horasTrab * elemento.valor_por_hora
+                print("O funcionário {} receberá R${:.2f} de salário.".format(nome, salario))
+            
+        else:
+            print("\n\033[31mNome não cadastrado!\033[0m\n")
+    
+
+while end != 0:
+    exibirMenu()
+    op = int(input("Digite a opção desejada: "))
+
+    if op == 1:
+        cadastrarDepartamento(listaDepartamentos)
+
+    elif op == 2:
+        listarDepartamentos(listaDepartamentos)
+
+    elif op == 3:
+        cadastrarFuncionario(listaFuncionarios)
+
+    elif op == 4:
+        listarFunc(listaFuncionarios)
+
+    elif op == 5:
+        calcularSalario(listaFuncionarios)
