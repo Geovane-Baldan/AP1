@@ -1,4 +1,5 @@
 from time import sleep
+
 end = -1
 listaDepartamentos = []
 listaFuncionarios = []
@@ -9,18 +10,22 @@ class Funcionario:
         self.nome = ""
         self.valor_por_hora = 0.0
         self.departamento = ""
-        self.salario = 0.0
+        self.horasTrab = 0
 
 
 def exibirMenu():
-    print("="*45)
+    print("=" * 45)
     print("Menu:")
     print("1 - Cadastrar departamento")
     print("2 - Listar departamentos")
     print("3 - Cadastrar funcionário")
     print("4 - Listar funcionários")
-    print("5 - Funcionário com maior salário no mês")
-    print("="*45)
+    print("5 - Calcular salário")
+    print("6 - Funcionário com maior salário no mês")
+    print("7 - Departamento com maior folha de pagamento")
+    print("8 - Excluir funcionários")
+    print("9 - Sair")
+    print("=" * 45)
 
 
 def validarDepartamento(lista, nome):
@@ -73,6 +78,8 @@ def cadastrarFuncionario(lista):
         departFunc = (input("Digite o departamento do funcionário: ")).upper()
         if validarDepartamento(listaDepartamentos, departFunc) is False:
             novoFunc.departamento = departFunc
+            horasTrab = int(input("Digite a quantidade de horas trabalhadas: "))
+            novoFunc.horasTrab = horasTrab
 
             lista.append(novoFunc)
             print("\n\033[32mFuncionário cadastrado com sucesso!\033[0m\n")
@@ -94,6 +101,8 @@ def listarFunc(lista):
             print("Departamento: {}".format(elemento.departamento))
             sleep(0.3)
             print("Valor por hora: R${:.2f}".format(elemento.valor_por_hora))
+            sleep(0.3)
+            print("Horas trabalhadas: {}".format(elemento.horasTrab))
             num += 1
     else:
         print("\n033[31mNenhum funcionário cadastrado!\033[0m\n")
@@ -101,20 +110,75 @@ def listarFunc(lista):
 
 def calcularSalario(lista):
     nome = input("Digite o nome do funcionário: ").capitalize()
+    funcionarioExiste = False
     for elemento in lista:
         if elemento.nome == nome:
-            horasTrab = int(input("Digite as horas trabalhadas: "))
-            if horasTrab > 200:
-                salario = horasTrab * elemento.valor_por_hora * 2
+            if elemento.horasTrab > 200:
+                salario = (200 * elemento.valor_por_hora) + (elemento.valor_por_hora * (elemento.horasTrab - 200) * 2)
                 print("O funcionário {} receberá R${:.2f} de salário.".format(nome, salario))
-                
+
             else:
-                salario = horasTrab * elemento.valor_por_hora
+                salario = elemento.horasTrab * elemento.valor_por_hora
                 print("O funcionário {} receberá R${:.2f} de salário.".format(nome, salario))
-            
+            funcionarioExiste = True
+
+    if funcionarioExiste is False:
+        print("\n\033[31mNome não cadastrado!\033[0m\n")
+
+
+def maiorSalario(lista):
+    maior = 0
+    funcionario = ""
+    for elemento in lista:
+        if elemento.horasTrab > 200:
+            if (200 * elemento.valor_por_hora) + (elemento.valor_por_hora * (elemento.horasTrab - 200) * 2) > maior:
+                maior = (200 * elemento.valor_por_hora) + (elemento.valor_por_hora * (elemento.horasTrab - 200) * 2)
+                funcionario = elemento.nome
         else:
-            print("\n\033[31mNome não cadastrado!\033[0m\n")
-    
+            if elemento.valor_por_hora * elemento.horasTrab > maior:
+                maior = elemento.valor_por_hora * elemento.horasTrab
+                funcionario = elemento.nome
+
+    print("O funcionário {} receberá o maior salário do mês, uma quantia de R${:.2f}".format(funcionario, maior))
+
+
+def departamentoMaisRico(lista):
+    dinheiro = 0
+    departamento = ""
+    copiaDaLista = []
+    maior = 0
+    for c in lista:
+        copiaDaLista.append(c)
+
+    for n in lista:
+        for elemento in copiaDaLista:
+            if n.departamento == elemento.departamento:
+                if elemento.horasTrab > 200:
+                    dinheiro += (200 * elemento.valor_por_hora) + (elemento.valor_por_hora * (elemento.horasTrab - 200) * 2)
+                else:
+                    dinheiro += elemento.valor_por_hora * elemento.horasTrab
+
+    if dinheiro > maior:
+        maior = dinheiro
+        departamento = n.departamento
+
+    print("O departamento de {} possui a maior folha de pagamento.".format(departamento))
+
+
+def exluirFunc(lista):
+    sucesso = False
+    horasMensais = int(input("Digite a quantidade de horas mínimas: "))
+    for elemento in lista:
+        if elemento.horasTrab < horasMensais:
+            lista.remove(elemento)
+            sucesso = True
+
+    if sucesso is True:
+        print("\n\033[32mFuncionários abaixo do esperado excluídos com sucesso!\033[0m\n")
+
+    else:
+        print("\n\033[31mNenhum funcionário foi exluído!\033[0m\n")
+
 
 while end != 0:
     exibirMenu()
@@ -134,3 +198,16 @@ while end != 0:
 
     elif op == 5:
         calcularSalario(listaFuncionarios)
+
+    elif op == 6:
+        maiorSalario(listaFuncionarios)
+
+    elif op == 7:
+        departamentoMaisRico(listaFuncionarios)
+
+    elif op == 8:
+        exluirFunc(listaFuncionarios)
+
+    elif op == 9:
+        print("Até logo!")
+        end = 0
