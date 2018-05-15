@@ -151,6 +151,7 @@ def departamentoMaisRico(lista):
         copiaDaLista.append(c)
 
     for n in lista:
+		dinheiro = 0 
         for elemento in copiaDaLista:
             if n.departamento == elemento.departamento:
                 if elemento.horasTrab > 200:
