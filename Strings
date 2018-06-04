@@ -1,0 +1,39 @@
+def Escada():
+    palavra = "palavra"
+
+    tamanho = palavra.__len__()
+
+    for i in range(tamanho):
+        print(palavra[0:i+1])
+
+
+def Palindromo():
+    texto = input("Digite a palavra: ")
+
+    invertido = ""
+    tamanho = len(texto)
+    textoSemEspacos = ""
+    cont = 0
+    for i in range(tamanho):
+        if texto[i] != " ":
+            textoSemEspacos = textoSemEspacos + texto[i]
+            cont += 1
+
+    texto = textoSemEspacos
+    tamanho = len(texto)
+
+    for x in range(tamanho):
+        invertido = invertido + texto[tamanho-1-x]
+
+    print(invertido)
+
+    if invertido == texto:
+        print("Palindromo!")
+
+    else:
+        print("Nao e palindromo!")
+
+
+Escada()
+print("\n")
+Palindromo()
