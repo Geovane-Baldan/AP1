@@ -1,0 +1,163 @@
+from time import sleep
+listaAlunos = []
+listaCursos = []
+contGeral = 0
+contMed = 0
+
+
+class Aluno:
+    def __init__(self):
+        self.nome = ""
+        self.idade = 0
+        self.curso = ""
+
+
+def Menu():
+    print("\n")
+    print("="*35)
+    print("0 - Sair")
+    print("1 - Cadastrar curso")
+    print("2 - Listar cursos")
+    print("3 - Cadastrar aluno")
+    print("4 - Listar alunos")
+    print("5 - Aluno mais novo")
+    print("6 - Percentual que fazem medicina")
+    print("7 - Alunos por curso")
+    print("=" * 35)
+
+
+def validarCurso(nome, lista):
+    jaExiste = True
+    if nome not in lista:
+        jaExiste = False
+
+    return jaExiste
+
+
+def cadastrarCurso(lista):
+    novoCurso = input("Digite o nome do curso: ").capitalize()
+
+    if validarCurso(novoCurso, lista) is False:
+        lista.append(novoCurso)
+        print("Curso cadastrado com sucesso!")
+    else:
+        print("Curso ja cadastrado!")
+
+
+def listarCursos(lista):
+    if len(lista) != 0:
+        print("="*30)
+        print("Cursos disponíveis: ")
+        for x in lista:
+            print("- {}".format(x))
+            sleep(0.3)
+
+
+def cadastrarAluno(listaAlu, listaCur):
+    global contMed, contGeral
+
+    novoAluno = Aluno()
+
+    nomeAluno = input("Digite o nome do aluno: ").capitalize()
+    idadeAluno = int(input("Digite a idade do aluno: "))
+    cursoAluno = input("Digite o curso do aluno: ").capitalize()
+
+    if validarCurso(cursoAluno, listaCur) is True:
+        novoAluno.nome = nomeAluno
+        novoAluno.idade = idadeAluno
+        novoAluno.curso = cursoAluno
+
+        listaAlu.append(novoAluno)
+        contGeral += 1
+        print("Aluno cadastrado com sucesso!")
+        if cursoAluno == "Medicina":
+            contMed += 1
+
+    else:
+        print("O curso escolhido não está cadastrado no sistema!")
+
+
+def listarAlunos(lista):
+    num = 1
+
+    if len(lista) != 0:
+        print("=" * 30)
+        for elemento in lista:
+            print("\nDados do aluno {}".format(num))
+            sleep(0.3)
+            print("Nome: {}".format(elemento.nome))
+            sleep(0.3)
+            print("Idade: {}".format(elemento.idade))
+            sleep(0.3)
+            print("Curso: {}".format(elemento.curso))
+            num += 1
+        print("=" * 30)
+
+
+def maisNovo(lista):
+    nomeMaisNovo = lista[0].nome
+    idadeMaisNovo = lista[0].idade
+
+    for x in lista:
+        if x.idade < idadeMaisNovo:
+            idadeMaisNovo = x.idade
+            nomeMaisNovo = x.nome
+
+    print("O(A) aluno(a) mais novo é o(a) {} que tem {} anos.".format(nomeMaisNovo, idadeMaisNovo))
+
+
+def PercMed():
+    if contGeral > 0:
+        print("Os alunos cursando medicina representam {:.1f}% do total.".format((contMed / contGeral) * 100))
+    else:
+        print("Os alunos cursando medicina representam {:.1f}% do total.".format((contMed / 1) * 100))
+
+
+def alunosPorCurso(lista):
+    if len(lista) != 0:
+        cursos = []
+        jaListado = []
+
+        for x in lista:
+            cursos.append(x.curso)
+
+        for a in cursos:
+            if a not in jaListado:
+                print("- {}: {} alunos.".format(a, cursos.count(a)))
+                jaListado.append(a)
+
+    else:
+        print("Nenhum aluno cadastrado!")
+
+
+while True:
+    Menu()
+    op = int(input("Digite a opção desejada: "))
+
+    if op == 1:
+        cadastrarCurso(listaCursos)
+
+    elif op == 2:
+        listarCursos(listaCursos)
+
+    elif op == 3:
+        cadastrarAluno(listaAlunos, listaCursos)
+
+    elif op == 4:
+        listarAlunos(listaAlunos)
+
+    elif op == 5:
+        maisNovo(listaAlunos)
+
+    elif op == 6:
+        PercMed()
+
+    elif op == 7:
+        alunosPorCurso(listaAlunos)
+
+    elif op == 0:
+        print("Até logo!")
+        break
+
+    else:
+        print("Por favor selecione uma opção válida!")
