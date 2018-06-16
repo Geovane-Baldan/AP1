@@ -1,0 +1,174 @@
+main = []
+
+
+class Cliente:
+    def __init__(self):
+        self.nome = ''
+        self.email = ''
+        self.avaliacao = ''
+        self.av = ''
+        self.numStar = 0
+
+
+def menu():
+    print('='*41)
+    print('Menu:')
+    print('0 - Sair')
+    print('1 - Cadastrar cliente')
+    print('2 - Listar avaliações')
+    print('3 - Atualizar avaliação')
+    print('4 - Informar a nota media do restaurante')
+    print('='*41)
+
+
+def gerarAV(avaliacao):
+    for x in avaliacao:
+        if 'bom' or 'excelente' or 'otimo' in x.avaliacao:
+            return 'Positiva'
+
+        elif 'ruim' or 'pessimo' or 'horrivel' in x.avaliacao:
+            return 'Negativa'
+
+        else:
+            return 'Indeterminada'
+
+
+def validarEmail(email):
+    if "@" in email:
+        return True
+
+    else:
+        return False
+
+
+def validarRepeticao(email):
+    for x in main:
+        if x.email == email:
+            return True
+
+    return False
+
+
+def cadastro():
+    novoCliente = Cliente()
+
+    novoCliente.nome = input('Digite seu nome: ').capitalize()
+
+    emailCliente = input('Digite seu email: ').lower()
+    if validarEmail(emailCliente) is True and validarRepeticao(emailCliente) is False:
+
+        avaliacaoCliente = input('Digite sua avaliação sobre o restaurante: ').capitalize()
+
+        novoCliente.av = gerarAV(avaliacaoCliente)
+        novoCliente.email = emailCliente
+        novoCliente.avaliacao = avaliacaoCliente
+
+        print('Selecione a quantidade de estrelas: ')
+        print('1 - 1 estrela')
+        print('2 - 2 estralas')
+        print('3 - 3 estralas')
+        print('4 - 4 estralas')
+        print('5 - 5 estralas')
+        estrelasCliente = int(input('Escolha sua opção: '))
+
+        if estrelasCliente == 1:
+            novoCliente.numStar = 1
+        elif estrelasCliente == 2:
+            novoCliente.numStar = 2
+        elif estrelasCliente == 3:
+            novoCliente.numStar = 3
+        elif estrelasCliente == 4:
+            novoCliente.numStar = 4
+        elif estrelasCliente == 5:
+            novoCliente.numStar = 5
+
+        main.append(novoCliente)
+
+        print('Cliente cadastrado com sucesso')
+
+    else:
+        print('Email invalido!')
+
+
+def listarAval():
+    if len(main) != 0:
+        index = 5
+        while index > -1:
+            for x in main:
+                if x.numStar == index:
+                    print('\n  {} estrelas:'.format(index))
+                    print('    Cliente: {}'.format(x.nome))
+                    print('    E-mail: {}'.format(x.email))
+                    print('    Avaliação: "{}"'.format(x.avaliacao))
+                    print('    Classificação automatica: {}'.format(x.av))
+            index -= 1
+
+    else:
+        print('Nenhuma avaliação cadastrada!')
+
+
+def gerarMedia():
+    totalAV = 0
+    totalNotas = 0
+
+    for x in main:
+        totalNotas += x.numStar
+        totalAV += 1
+
+    print('A nota media do restaurante é de {:.1f} estrelas.'.format(totalNotas / totalAV))
+
+
+def attAV():
+    existe = False
+    emailCliente = input('Digite seu email: ').lower()
+
+    for x in main:
+        if x.email == emailCliente:
+            existe = True
+            print('Sua avaliacao antiga foi:\n "{}"'.format(x.avaliacao))
+
+            op = input('Deseja atualizar sua avaliacao? ').lower()
+
+            if op == 'sim' or 's':
+                x.avaliacao = input('Digite sua nova avaliacao: ').capitalize()
+
+            else:
+                print('Tudo bem, vamos ficar com sua avaliacao ja cadastrada! :)')
+
+    if existe is False:
+
+        print('Nao encontramos voce cadastrado no sistema!')
+
+        op2 = input('Deseja se cadastrar e registrar sua avaliacao? ').lower()
+
+        if op2 == 'sim' or 's':
+            cadastro()
+
+        else:
+            print('Tudo bem, entendemos sua opcao. Ate a proxima!')
+
+
+while True:
+    menu()
+    op = int(input('Digite a opcao desejada: '))
+
+    if op == 0:
+        print('Ate logo!')
+        break
+
+    elif op == 1:
+        cadastro()
+
+    elif op == 2:
+        listarAval()
+
+    elif op == 3:
+        attAV()
+
+    elif op == 4:
+        gerarMedia()
+
+    else:
+        print('Selecione uma opcao disponivel!')
+
+
