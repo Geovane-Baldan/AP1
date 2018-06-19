@@ -1,0 +1,247 @@
+from time import sleep
+main = []
+
+
+class Jogador:
+    def __init__(self):
+        self.nome = ''
+        self.idade = 0
+        self.pais = ''
+        self.caract = ''
+        self.comentarios = []
+
+
+def Menu():
+    print('\n')
+    print('='*45)
+    print('Menu:')
+    print('0 - Sair')
+    print('1 - Cadastrar jogador')
+    print('2 - Listar jogadores')
+    print('3 - Listar por nação')
+    print('4 - Listar jogadores velozes')
+    print('5 - Listar jogadores Brasil, Argentina e Uruguai')
+    print('6 - Inserir novo comentário')
+    print('7 - Informar quantos jogadores são lentos')
+    print('8 - Informar quantos comentário do Neymar habilidoso')
+    print('='*45)
+
+
+def validarIdade(idade):
+    if idade < 16:
+        return False
+
+    else:
+        return True
+
+
+def cadastro():
+    novoJogador = Jogador()
+
+    nomeJogador = input('Digite o nome do jogador: ').capitalize()
+
+    idadeJogador = int(input('Digite a idade do jogador: '))
+
+    if validarIdade(idadeJogador) is True:
+
+        paisJogador = input('Digite o país do jogador: ').capitalize()
+
+        caractJogador = input('Digite a característica desse jogador: ').capitalize()
+
+        comentarioJogador = input('Digite o comentario da torcida: ').capitalize()
+
+        novoJogador.nome = nomeJogador
+        novoJogador.idade = idadeJogador
+        novoJogador.pais = paisJogador
+        novoJogador.caract = caractJogador
+        novoJogador.comentarios.append(comentarioJogador)
+
+        main.append(novoJogador)
+        print('\nJogador cadastrado com sucesso!')
+
+    else:
+        print('\nERRO! Idade inválida!')
+
+
+def listarGeral():
+    num = 1
+    if len(main) != 0:
+        for x in main:
+            print('\nDados do jogador {}: '.format(num))
+
+            print('Nome: {}'.format(x.nome))
+            sleep(0.3)
+            print('Idade: {}'.format(x.idade))
+            sleep(0.3)
+            print('País: {}'.format(x.pais))
+            sleep(0.3)
+            print('Característica: {}'.format(x.caract))
+            sleep(0.3)
+            print('Comentários:')
+            sleep(0.3)
+            for y in x.comentarios:
+                print('#{}'.format(y))
+                sleep(0.3)
+            num += 1
+    else:
+        print('Nenhum jogador cadastrado!')
+
+
+def listarNacao():
+    existe = False
+    if len(main) != 0:
+        opSelecao = input('Digite o país desejado: ').capitalize()
+
+        for x in main:
+            if x.pais == opSelecao:
+                print('Nome: {}'.format(x.nome))
+                sleep(0.3)
+                print('Idade: {}'.format(x.idade))
+                sleep(0.3)
+                print('Característica: {}'.format(x.caract))
+                sleep(0.3)
+                print('Comentários:')
+                sleep(0.3)
+                for y in x.comentarios:
+                    nro = 1
+                    print('#{}. {}'.format(nro, y))
+                    sleep(0.3)
+                    nro += 1
+                existe = True
+
+        if existe is False:
+            print('Nenhum jogador desse país foi encontrado!')
+
+    else:
+        print('Cadastre algum jogador antes de pedir para serem listados!')
+
+
+def novoComent():
+    cadastrado = False
+    if len(main) != 0:
+
+        nomeJogador = input('Digite o nome do jogador: ').capitalize()
+
+        for x in main:
+            if x.nome == nomeJogador:
+                cadastrado = True
+                novoComentario = input('Digite o novo comentário: ').capitalize()
+
+                x.comentarios.append(novoComentario)
+                print('\nComentario cadastrado com sucesso!')
+
+        if cadastrado is False:
+            print('\nEsse jogador não foi cadastrado!')
+
+    else:
+        print('\nNenhum jogador cadastrado!')
+
+
+def listarVelozes():
+    if len(main) != 0:
+        existe = False
+        for x in main:
+            if x.caract == 'Veloz':
+                existe = True
+                print('\nNome: {}'.format(x.nome))
+                sleep(0.3)
+                print('Idade: {}'.format(x.idade))
+                sleep(0.3)
+                print('País: {}'.format(x.pais))
+                sleep(0.3)
+                print('Características: {}'.format(x.caract))
+                sleep(0.3)
+                print('Comentários:')
+                sleep(0.3)
+                for y in x.comentarios:
+                    nro = 1
+                    print('#{}. {}'.format(nro, y))
+                    sleep(0.3)
+                    nro += 1
+        if existe is False:
+            print('\nNenhum jogador veloz foi cadastrado!')
+    else:
+        print('\nNenhum jogador cadastrado!')
+
+
+def jogadorLento():
+    if len(main) != 0:
+        lentos = 0
+        for x in main:
+            if x.caract == 'Lento':
+                lentos += 1
+
+        print('\nForam cadastrados {} jogadores considerados lentos.'.format(lentos))
+    else:
+        print('\nNenhum jogador cadastrado!')
+
+
+def Neymar():
+    if len(main) != 0:
+        neymarBom = 0
+
+        for x in main:
+            if x.nome == 'Neymar':
+                for y in x.comentarios:
+                    if "habilidoso" or "Habilidoso" in y:
+                        print('#{}'.format(y))
+                        neymarBom += 1
+
+        print('\nForam contados {} comentários falando sobre a habilidade do Neymar.'.format(neymarBom))
+    else:
+        print('\nNenhum jogador cadastrado!')
+
+
+def listarNacaoEsp():
+    if len(main) != 0:
+        for x in main:
+            if x.pais == 'Brasil' or x.pais == 'Argentina' or x.pais == 'Uruguai':
+                print('\nNome: {}'.format(x.nome))
+                sleep(0.3)
+                print('País: {}'.format(x.pais))
+                sleep(0.3)
+                print('Comentários:')
+                sleep(0.3)
+                for y in x.comentarios:
+                    nro = 1
+                    print('#{}. {}'.format(nro, y))
+                    sleep(0.3)
+                    nro += 1
+    else:
+        print('\nNenhum jogador cadastrado!')
+
+
+while True:
+    Menu()
+    op = int(input('Digite a opção desejada: '))
+
+    if op == 0:
+        print('Até logo!')
+        break
+
+    elif op == 1:
+        cadastro()
+
+    elif op == 2:
+        listarGeral()
+
+    elif op == 3:
+        listarNacao()
+
+    elif op == 4:
+        listarVelozes()
+
+    elif op == 5:
+        listarNacaoEsp()
+
+    elif op == 6:
+        novoComent()
+
+    elif op == 7:
+        jogadorLento()
+
+    elif op == 8:
+        Neymar()
+
+    else:
+        print('Selecione uma opção válida!')
